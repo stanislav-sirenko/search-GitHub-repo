@@ -28,7 +28,6 @@ function elementCreation(elementTag, ellementClass) {
 }
 
 function userCreation(dataUser) {
-  console.log(dataUser);
   let userCheck = elementCreation("li", "check-prev");
   userCheck.innerHTML = `${dataUser.name}`;
   let cardList = searchList.appendChild(userCheck);
@@ -67,8 +66,7 @@ function usersRequest(searchValue) {
     fetch(`https://api.github.com/search/repositories?q=${searchValue}&per_page=5`)
       .then((response) => {
         response.json().then((response) => {
-          response.items.forEach((repositories) => {
-            console.log(repositories);
+          response.items.slice(0, 5).forEach((repositories) => {
             userCreation(repositories);
           });
         });
