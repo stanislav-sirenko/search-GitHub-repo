@@ -1,75 +1,82 @@
-function createEl(elTag, elClass) {
-  let element = document.createElement(elTag);
-  if (elClass) element.classList.add(elClass);
+const backgroundImage = elementCreation("div", "background-image");
+document.body.appendChild(backgroundImage);
+
+const wrapperElement = elementCreation("div", "wrapper-element");
+backgroundImage.appendChild(wrapperElement);
+
+const infoElement = elementCreation("h1", "info-element");
+wrapperElement.appendChild(infoElement);
+infoElement.textContent = "GitHub search repo...";
+
+const searchLine = elementCreation("div", "search-line");
+wrapperElement.appendChild(searchLine);
+
+const searchInput = elementCreation("input", "search-input");
+searchInput.setAttribute("type", "search");
+searchLine.appendChild(searchInput);
+
+const searchList = elementCreation("ul", "check-counter");
+searchLine.appendChild(searchList);
+
+const usersList = elementCreation("ul", "users-list");
+wrapperElement.appendChild(usersList);
+
+function elementCreation(elementTag, ellementClass) {
+  let element = document.createElement(elementTag);
+  if (ellementClass) element.classList.add(ellementClass);
   return element;
 }
 
-function createUs(data) {
-  let usCheck = createEl("li", "check-prev");
-  usCheck.innerHTML = `${data.name}`;
-  let res = searchCounter.appendChild(usCheck);
+function userCreation(dataUser) {
+  console.log(dataUser);
+  let userCheck = elementCreation("li", "check-prev");
+  userCheck.innerHTML = `${dataUser.name}`;
+  let cardList = searchList.appendChild(userCheck);
 
-  res.addEventListener("click", function () {
-    let addUs = createEl("li", "add-user");
-    addUs.innerHTML = `<ul class="add-el"><li>Name: ${data.name}</li><li>Owner: ${data.owner.login}</li><li>Stars: ${data.stargazers_count}</li></ul><input class="image-button" type="image" src="./delete.svg"></input>`;
-    usersList.appendChild(addUs);
-    document.querySelectorAll(".image-button").forEach((e) => {
-      e.addEventListener("click", () => e.parentElement.remove());
+  cardList.addEventListener("click", function () {
+    let addCard = elementCreation("li", "add-list");
+    addCard.innerHTML = `<ul class="add-card"><li>Name: ${dataUser.name}</li><li>Owner: ${dataUser.owner.login}</li><li>Stars: ${dataUser.stargazers_count}</li></ul><input class="image-button" type="image" src="./src/delete.svg"></input>`;
+    usersList.appendChild(addCard);
+    document.querySelectorAll(".image-button").forEach((event) => {
+      event.addEventListener("click", () => event.parentElement.remove());
     });
-    searchCounter.innerHTML = "";
+    searchList.innerHTML = "";
     searchInput.value = "";
   });
 }
 
-let bgr = document.querySelector(".background");
-
-let wrap = createEl("div", "wrap");
-bgr.appendChild(wrap);
-
-let app = createEl("h1", "app");
-wrap.appendChild(app);
-app.textContent = "GitHub search repo...";
-app.style.textAlign = "center";
-
-let searchLine = createEl("div", "search-line");
-wrap.appendChild(searchLine);
-
-let searchInput = createEl("input", "search-input");
-searchLine.appendChild(searchInput);
-
-let searchCounter = createEl("ul", "check-counter");
-searchLine.appendChild(searchCounter);
-
-let usersList = createEl("ul", "users");
-wrap.appendChild(usersList);
-
-const debounce = (fn, debounceTime) => {
+function debounce(fn, debounceTime) {
   let timer;
   return function (...args) {
     clearTimeout(timer);
     timer = setTimeout(() => fn.apply(this, args), debounceTime);
   };
-};
+}
 
 function loadUsers() {
   if (searchInput.value) {
-    searchCounter.innerHTML = "";
+    searchList.innerHTML = "";
     usersRequest(searchInput.value);
   } else {
-    searchCounter.innerHTML = "";
+    searchList.innerHTML = "";
   }
 }
 
 function usersRequest(searchValue) {
   try {
-    fetch(`https://api.github.com/search/repositories?q=${searchValue}&per_page=5`).then((res) => {
-      res.json().then((res) => {
-        res.items.forEach((user) => createUs(user));
-      });
-    });
-  } catch (e) {
-    console.log("Ошибка: " + e);
+    fetch(`https://api.github.com/search/repositories?q=${searchValue}&per_page=5`)
+      .then((response) => {
+        response.json().then((response) => {
+          response.items.forEach((repositories) => {
+            console.log(repositories);
+            userCreation(repositories);
+          });
+        });
+      })
+      .catch((error) => console.log("Ошибка: " + error));
+  } catch (error) {
+    console.log("Ошибка: " + error);
   }
 }
 
-searchInput.addEventListener("keyup", debounce(loadUsers, 500));
+searchInput.addEventListener("input", debounce(loadUsers, 500));

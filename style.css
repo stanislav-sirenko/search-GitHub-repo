@@ -3,14 +3,15 @@ body {
   margin: 0px;
 }
 
-.background {
-  background: url("./Background.png") no-repeat center;
+.background-image {
+  background: url("./src/Background.png") no-repeat center;
   min-width: 100%;
   min-height: 100vh;
   z-index: 1;
 }
 
-.app {
+.info-element {
+  align-items: center;
   margin-top: 250px;
   z-index: 1;
   color: #00c3f4;
@@ -21,14 +22,11 @@ body {
   z-index: 1;
 }
 
-.wrap {
+.wrapper-element {
   min-height: 70vh;
-  /* background-color: #7b7b7e40; */
-  /* border-radius: 20px; */
   display: flex;
   flex-direction: column;
   align-items: center;
-  /* box-shadow: 22px 22px 22px 1px rgba(0, 0, 10, 0.2); */
 }
 
 .search-input {
@@ -42,17 +40,16 @@ body {
   box-shadow: 7px 7px 7px 3px rgba(0, 0, 10, 0.2);
 }
 
-.users {
+.users-list {
   list-style: none;
   padding: 0;
   z-index: 1;
 }
 
-.add-user {
+.add-list {
   min-width: 300px;
   display: flex;
   justify-content: space-between;
-  /* border: 1px solid grey; */
   border-radius: 5px;
   padding: 5px;
   margin: 15px;
@@ -60,7 +57,7 @@ body {
   box-shadow: 7px 7px 7px 3px rgba(0, 0, 10, 0.2);
 }
 
-.add-el {
+.add-card {
   list-style: none;
   padding: 5px;
   max-width: 250px;
