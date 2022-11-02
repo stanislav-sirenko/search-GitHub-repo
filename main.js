@@ -44,20 +44,21 @@ function userCreation(dataUser) {
   });
 }
 
-function debounce(fn, debounceTime) {
+const debounce = (fn, debounceTime) => {
   let timer;
-  return function (...args) {
+  return function () {
+    const fnCall = () => fn.apply(this, arguments);
     clearTimeout(timer);
-    timer = setTimeout(() => {
-      fn.apply(this, args), debounceTime;
-    });
+    timer = setTimeout(fnCall, debounceTime);
   };
-}
+};
 
 function loadUsers() {
-  searchList.innerHTML = "";
   if (searchInput.value) {
+    searchList.innerHTML = "";
     usersRequest(searchInput.value);
+  } else {
+    searchList.innerHTML = "";
   }
 }
 
@@ -83,4 +84,4 @@ ${e}`);
   }
 }
 
-searchInput.addEventListener("input", debounce(loadUsers), 500);
+searchInput.addEventListener("input", debounce(loadUsers, 500));
