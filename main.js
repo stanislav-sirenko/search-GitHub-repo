@@ -48,16 +48,16 @@ function debounce(fn, debounceTime) {
   let timer;
   return function (...args) {
     clearTimeout(timer);
-    timer = setTimeout(() => fn.apply(this, args), debounceTime);
+    timer = setTimeout(() => {
+      fn.apply(this, args), debounceTime;
+    });
   };
 }
 
 function loadUsers() {
+  searchList.innerHTML = "";
   if (searchInput.value) {
-    searchList.innerHTML = "";
     usersRequest(searchInput.value);
-  } else {
-    searchList.innerHTML = "";
   }
 }
 
@@ -66,9 +66,15 @@ function usersRequest(searchValue) {
     fetch(`https://api.github.com/search/repositories?q=${searchValue}&per_page=5`)
       .then((response) => {
         response.json().then((response) => {
-          response.items.slice(0, 5).forEach((repositories) => {
-            userCreation(repositories);
-          });
+          searchList.innerHTML = "";
+          try {
+            response.items.forEach((repositories) => {
+              userCreation(repositories);
+            });
+          } catch (e) {
+            console.log(`Превышено количество запросов! 
+${e}`);
+          }
         });
       })
       .catch((error) => console.log("Ошибка: " + error));
@@ -77,4 +83,4 @@ function usersRequest(searchValue) {
   }
 }
 
-searchInput.addEventListener("input", debounce(loadUsers, 500));
+searchInput.addEventListener("input", debounce(loadUsers), 500);
