@@ -54,12 +54,8 @@ const debounce = (fn, debounceTime) => {
 };
 
 function loadUsers() {
-  if (searchInput.value) {
-    searchList.innerHTML = "";
-    usersRequest(searchInput.value);
-  } else {
-    searchList.innerHTML = "";
-  }
+  searchList.innerHTML = "";
+  if (searchInput.value) usersRequest(searchInput.value);
 }
 
 function usersRequest(searchValue) {
